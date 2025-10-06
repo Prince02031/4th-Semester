@@ -6,6 +6,23 @@
 
 using namespace std;
 
+void bfs(int start, vector<vector<int>>& adj, vector<bool>& visited, vector<int>& component) {
+    queue<int> q;
+    q.push(start);
+    visited[start] = true;
+
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        component.push_back(u); // add node to the current component
+
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}
 
 
 int main()

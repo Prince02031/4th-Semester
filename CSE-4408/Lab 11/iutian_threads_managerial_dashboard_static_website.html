@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IUTian Threads – Managerial Dashboard</title>
+  <!-- Tailwind for styling (matches prior mockups) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for simple, pretty charts (static demo data) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --brand-navy:#1f3a5f; /* used across cards/buttons */
+      --brand-salmon-1:#d97a70; /* app bar gradient start */
+      --brand-salmon-2:#e99b93; /* app bar gradient end */
+      --bg-surface: 246,247,249; /* light gray background */
+    }
+    .appbar-gradient{background: linear-gradient(90deg,var(--brand-salmon-1) 0%,var(--brand-salmon-2) 100%);}  
+    .card{ @apply rounded-2xl bg-white shadow; }
+    .kpi-number{ @apply text-2xl font-semibold; }
+    .badge{ @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium; }
+    .badge-low{ @apply bg-emerald-100 text-emerald-700; }
+    .badge-med{ @apply bg-amber-100 text-amber-700; }
+    .badge-high{ @apply bg-rose-100 text-rose-700; }
+  </style>
+</head>
+<body class="min-h-screen bg-[rgb(var(--bg-surface))] text-gray-900">
+  <!-- Header -->
+  <header class="appbar-gradient sticky top-0 z-20">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 grid place-items-center text-2xl">🦉</div>
+          <h1 class="text-xl font-serif text-white drop-shadow-sm">IUTian Threads – Managerial Dashboard</h1>
+        </div>
+        <div class="hidden md:flex items-center gap-3 w-[28rem] max-w-full">
+          <div class="flex items-center gap-2 bg-white/70 backdrop-blur px-3 py-2 rounded-full w-full shadow-sm">
+            <span class="text-gray-500">☰</span>
+            <input class="bg-transparent outline-none text-sm w-full placeholder:text-gray-500" placeholder="Search metrics, posts, users" />
+            <span class="text-gray-500">🔍</span>
+          </div>
+          <img class="h-9 w-9 rounded-full ring-2 ring-white/60" src="https://i.pravatar.cc/40?img=5" alt="profile" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Layout -->
+  <div class="mx-auto max-w-7xl px-4 py-6 grid grid-cols-12 gap-6">
+    <!-- Sidebar -->
+    <aside class="col-span-12 md:col-span-3 lg:col-span-2">
+      <nav class="card p-4 space-y-2">
+        <a class="block px-4 py-2 rounded-xl bg-[color:var(--brand-navy)] text-white" href="#">Overview</a>
+        <a class="block px-4 py-2 rounded-xl border border-gray-200 hover:bg-gray-50" href="#">Content</a>
+        <a class="block px-4 py-2 rounded-xl border border-gray-200 hover:bg-gray-50" href="#">Users</a>
+        <a class="block px-4 py-2 rounded-xl border border-gray-200 hover:bg-gray-50" href="#moderation">Moderation</a>
+        <a class="block px-4 py-2 rounded-xl border border-gray-200 hover:bg-gray-50" href="#settings">Settings</a>
+        <div class="pt-4 mt-2 border-t">
+          <div class="text-xs uppercase text-gray-500 mb-2">Filters</div>
+          <div class="space-y-2">
+            <select id="dateRange" class="w-full rounded-xl border-gray-200">
+              <option value="7">Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+            <select class="w-full rounded-xl border-gray-200"><option>All subforums</option><option>general issues</option><option>academic issues</option><option>facilities issues</option></select>
+            <button id="applyFilters" class="w-full px-4 py-2 rounded-xl bg-[color:var(--brand-navy)] text-white">Apply</button>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="col-span-12 md:col-span-9 lg:col-span-7 space-y-6">
+      <!-- KPIs -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="card p-4">
+          <div class="text-xs text-gray-500">Total Posts</div>
+          <div id="kpiPosts" class="kpi-number">—</div>
+          <div id="kpiPostsDelta" class="text-xs text-emerald-600">—</div>
+        </div>
+        <div class="card p-4">
+          <div class="text-xs text-gray-500">Comments</div>
+          <div id="kpiComments" class="kpi-number">—</div>
+          <div id="kpiCommentsDelta" class="text-xs text-emerald-600">—</div>
+        </div>
+        <div class="card p-4">
+          <div class="text-xs text-gray-500">Active Users</div>
+          <div id="kpiUsers" class="kpi-number">—</div>
+          <div id="kpiUsersDelta" class="text-xs text-emerald-600">—</div>
+        </div>
+        <div class="card p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs text-gray-500">Flagged Items</div>
+              <div id="kpiFlags" class="kpi-number">—</div>
+            </div>
+            <span class="badge badge-med">Moderate</span>
+          </div>
+          <div id="kpiFlagsDelta" class="text-xs text-rose-600">—</div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold">Engagement Over Time</h3>
+            <span class="text-xs text-gray-500">Posts & Comments</span>
+          </div>
+          <canvas id="lineEngagement" height="140" aria-label="Engagement line chart" role="img"></canvas>
+        </div>
+        <div class="card p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold">Posts by Subforum</h3>
+            <span class="text-xs text-gray-500">Distribution</span>
+          </div>
+          <canvas id="barSubforums" height="140" aria-label="Subforum bar chart" role="img"></canvas>
+        </div>
+        <div class="card p-4 lg:col-span-2">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold">Flag Reasons</h3>
+            <span class="text-xs text-gray-500">Proportions</span>
+          </div>
+          <canvas id="pieFlags" height="120" aria-label="Flag reasons pie chart" role="img"></canvas>
+        </div>
+      </section>
+
+      <!-- Tables -->
+      <section id="moderation" class="card p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Recent Flags</h3>
+          <button class="px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50">View All</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left text-gray-500">
+                <th class="py-2">Post</th>
+                <th class="py-2">Subforum</th>
+                <th class="py-2">Reason</th>
+                <th class="py-2">Severity</th>
+                <th class="py-2">Reported</th>
+                <th class="py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="flagsBody" class="align-top">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Top Posts (This Period)</h3>
+          <button class="px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50">Export CSV</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left text-gray-500">
+                <th class="py-2">Title</th>
+                <th class="py-2">Subforum</th>
+                <th class="py-2">Votes</th>
+                <th class="py-2">Comments</th>
+                <th class="py-2">Author</th>
+              </tr>
+            </thead>
+            <tbody id="topPostsBody" class="align-top">
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Right rail -->
+    <aside class="col-span-12 lg:col-span-3 space-y-4">
+      <div class="card p-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold">Quick Actions</h3>
+          <button class="h-9 w-9 grid place-items-center rounded-full bg-gray-100">⋯</button>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-2">
+          <button class="px-3 py-2 rounded-xl bg-[color:var(--brand-navy)] text-white">Create Notice</button>
+          <button class="px-3 py-2 rounded-xl border border-gray-200">Review Queue</button>
+          <button class="px-3 py-2 rounded-xl border border-gray-200">Manage Tags</button>
+          <button class="px-3 py-2 rounded-xl border border-gray-200">Role Manager</button>
+        </div>
+      </div>
+
+      <div class="card p-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold">Announcements</h3>
+          <button class="h-8 w-8 grid place-items-center rounded-full bg-gray-100">↗</button>
+        </div>
+        <ul class="mt-3 list-disc pl-5 text-sm text-gray-700 space-y-2">
+          <li>New semester subforum structure deployed.</li>
+          <li>Anonymous posting policy updated (v1.2).</li>
+          <li>Moderation SLAs: High=4h, Medium=24h, Low=72h.</li>
+        </ul>
+      </div>
+
+      <div class="card p-4" id="settings">
+        <h3 class="font-semibold mb-2">Branding</h3>
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-lg" style="background:var(--brand-salmon-1)"></div>
+          <div class="h-8 w-8 rounded-lg" style="background:var(--brand-salmon-2)"></div>
+          <div class="h-8 w-8 rounded-lg" style="background:var(--brand-navy)"></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Using IUTian Threads palette to match product UI.</p>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // --- Demo data generator (keeps the page static but lively) ---
+    function range(n){return Array.from({length:n},(_,i)=>i)}
+
+    function generateSeries(days=30){
+      // simulates posts & comments counts per day
+      const posts=range(days).map(()=>Math.floor(8+Math.random()*20))
+      const comments=posts.map(p=>Math.floor(p* (1.8+Math.random()*1.8)))
+      return {posts,comments}
+    }
+
+    function sum(a){return a.reduce((x,y)=>x+y,0)}
+
+    function pctDelta(curr,prev){
+      if(prev===0) return 0
+      return Math.round(((curr-prev)/prev)*100)
+    }
+
+    const COLORS = {
+      line1: 'rgba(31,58,95,0.95)',
+      line2: 'rgba(233,155,147,0.9)',
+      bar1: 'rgba(31,58,95,0.85)',
+      bar2: 'rgba(217,122,112,0.85)',
+      pie: [
+        'rgba(31,58,95,0.9)','rgba(233,155,147,0.9)','rgba(217,122,112,0.9)',
+        'rgba(99,102,241,0.9)','rgba(16,185,129,0.9)'
+      ]
+    }
+
+    // Initialize with 30-day window
+    let DAYS = 30
+    let series = generateSeries(DAYS)
+
+    function hydrateKPIs(){
+      const totalPosts = sum(series.posts)
+      const totalComments = sum(series.comments)
+      const activeUsers = Math.round(totalComments*0.4 + totalPosts*0.6)
+      const flagged = Math.max(3, Math.round(totalPosts*0.08))
+
+      // previous period deltas (simple fake calc)
+      const prevPosts = Math.round(totalPosts * (0.85 + Math.random()*0.2))
+      const prevComments = Math.round(totalComments * (0.82 + Math.random()*0.2))
+      const prevUsers = Math.round(activeUsers * (0.88 + Math.random()*0.2))
+      const prevFlags = Math.round(flagged * (0.9 + Math.random()*0.3))
+
+      document.getElementById('kpiPosts').textContent = totalPosts
+      document.getElementById('kpiComments').textContent = totalComments
+      document.getElementById('kpiUsers').textContent = activeUsers
+      document.getElementById('kpiFlags').textContent = flagged
+
+      document.getElementById('kpiPostsDelta').textContent = `${pctDelta(totalPosts, prevPosts)}% vs prev`
+      document.getElementById('kpiCommentsDelta').textContent = `${pctDelta(totalComments, prevComments)}% vs prev`
+      document.getElementById('kpiUsersDelta').textContent = `${pctDelta(activeUsers, prevUsers)}% vs prev`
+      document.getElementById('kpiFlagsDelta').textContent = `${pctDelta(flagged, prevFlags)}% vs prev`
+    }
+
+    function labelDates(n){
+      const today = new Date()
+      return range(n).map(i=>{
+        const d = new Date(today)
+        d.setDate(today.getDate() - (n-1-i))
+        return `${d.getMonth()+1}/${d.getDate()}`
+      })
+    }
+
+    // Charts
+    let lineChart, barChart, pieChart
+
+    function buildCharts(){
+      const ctx1 = document.getElementById('lineEngagement').getContext('2d')
+      const ctx2 = document.getElementById('barSubforums').getContext('2d')
+      const ctx3 = document.getElementById('pieFlags').getContext('2d')
+
+      // 1) Engagement over time
+      lineChart = new Chart(ctx1, {
+        type:'line',
+        data:{
+          labels: labelDates(DAYS),
+          datasets:[
+            {label:'Posts', data: series.posts, borderColor: COLORS.line1, backgroundColor: 'rgba(31,58,95,0.08)', fill:true, tension:0.35},
+            {label:'Comments', data: series.comments, borderColor: COLORS.line2, backgroundColor: 'rgba(233,155,147,0.08)', fill:true, tension:0.35}
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins:{legend:{position:'bottom'}},
+          scales:{x:{grid:{display:false}}, y:{beginAtZero:true}}
+        }
+      })
+
+      // 2) Subforum distribution (static demo)
+      const subs = ['general issues','academic issues','facilities issues','events','marketplace']
+      const subCounts = subs.map(()=> Math.round(40 + Math.random()*80))
+      barChart = new Chart(ctx2, {
+        type:'bar',
+        data:{labels: subs, datasets:[{label:'Posts', data: subCounts, backgroundColor: COLORS.bar1}]},
+        options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
+      })
+
+      // 3) Flag reasons pie (static demo)
+      const reasons = ['Harassment','Spam','Academic Misinfo','NSFW','Other']
+      const counts = [12,18,7,4,9]
+      pieChart = new Chart(ctx3, {
+        type:'doughnut',
+        data:{labels:reasons, datasets:[{data:counts, backgroundColor: COLORS.pie}]},
+        options:{plugins:{legend:{position:'bottom'}}, cutout:'55%'}
+      })
+    }
+
+    function populateTables(){
+      const flags = [
+        {title:'Lab slots conflict with exam week', sub:'academic issues', reason:'Academic Misinfo', sev:'Medium', when:'2h ago'},
+        {title:'Selling old router (cheap!)', sub:'marketplace', reason:'Spam', sev:'Low', when:'4h ago'},
+        {title:'Inappropriate graffiti in CSE building', sub:'facilities issues', reason:'NSFW', sev:'High', when:'6h ago'},
+        {title:'Rude behavior at cafeteria', sub:'general issues', reason:'Harassment', sev:'High', when:'yesterday'},
+      ]
+      const tbody = document.getElementById('flagsBody')
+      tbody.innerHTML = ''
+      flags.forEach(f=>{
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td class="py-2 pr-4">${f.title}</td>
+          <td class="py-2 pr-4">${f.sub}</td>
+          <td class="py-2 pr-4">${f.reason}</td>
+          <td class="py-2 pr-4">${badgeFor(f.sev)}</td>
+          <td class="py-2 pr-4">${f.when}</td>
+          <td class="py-2"><div class="flex gap-2"><button class="px-2 py-1 rounded-lg border">Review</button><button class="px-2 py-1 rounded-lg border">Dismiss</button></div></td>
+        `
+        tbody.appendChild(tr)
+      })
+
+      const topPosts = [
+        {title:'How to prepare for OS mid-term?', sub:'academic issues', votes:128, comments:54, author:'s/Zara'},
+        {title:'Wi-Fi dead zones in Dorm A', sub:'facilities issues', votes:96, comments:31, author:'s/Naeem'},
+        {title:'Lost & Found: Blue calculator', sub:'general issues', votes:74, comments:22, author:'s/Anis'},
+      ]
+      const tp = document.getElementById('topPostsBody')
+      tp.innerHTML = ''
+      topPosts.forEach(p=>{
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td class="py-2 pr-4">${p.title}</td>
+          <td class="py-2 pr-4">${p.sub}</td>
+          <td class="py-2 pr-4 font-medium">${p.votes}</td>
+          <td class="py-2 pr-4">${p.comments}</td>
+          <td class="py-2 pr-4">${p.author}</td>
+        `
+        tp.appendChild(tr)
+      })
+    }
+
+    function badgeFor(sev){
+      if(sev==='High') return '<span class="badge badge-high">High</span>'
+      if(sev==='Medium') return '<span class="badge badge-med">Medium</span>'
+      return '<span class="badge badge-low">Low</span>'
+    }
+
+    function refreshAll(){
+      hydrateKPIs()
+      if(lineChart){ lineChart.destroy(); barChart.destroy(); pieChart.destroy(); }
+      buildCharts()
+      populateTables()
+    }
+
+    // Filter hook (date range only affects the timeseries density for demo)
+    document.getElementById('applyFilters').addEventListener('click',()=>{
+      const sel = document.getElementById('dateRange')
+      DAYS = parseInt(sel.value,10)
+      series = generateSeries(DAYS)
+      refreshAll()
+    })
+
+    // First paint
+    refreshAll()
+  </script>
+</body>
+</html>

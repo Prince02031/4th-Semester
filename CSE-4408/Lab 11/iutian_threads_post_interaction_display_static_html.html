@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IUTian Threads – Post Interaction Display (Static Mockup)</title>
+  <!-- Tailwind CDN for identical styling to the React mockup -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .appbar-gradient { background: linear-gradient(90deg, #d97a70 0%, #e99b93 100%); }
+  </style>
+</head>
+<body class="min-h-screen bg-[rgb(246,247,249)] text-gray-900">
+  <!-- Top App Bar -->
+  <header class="appbar-gradient sticky top-0 z-10">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 grid place-items-center text-2xl">🦉</div>
+          <h1 class="text-xl font-serif text-white drop-shadow-sm">IUTian Threads</h1>
+        </div>
+        <div class="flex items-center gap-3 w-[28rem] max-w-full">
+          <div class="flex items-center gap-2 bg-white/70 backdrop-blur px-3 py-2 rounded-full w-full shadow-sm">
+            <span class="text-gray-500">☰</span>
+            <input class="bg-transparent outline-none text-sm w-full placeholder:text-gray-500" placeholder="Search" />
+            <span class="text-gray-500">🔍</span>
+          </div>
+          <img class="h-9 w-9 rounded-full ring-2 ring-white/60" src="https://i.pravatar.cc/40?img=5" alt="profile" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Grid -->
+  <main class="mx-auto max-w-7xl px-4 py-6 grid grid-cols-12 gap-6">
+    <!-- Left Sidebar -->
+    <aside class="col-span-12 md:col-span-3">
+      <div class="rounded-2xl bg-white shadow p-4 space-y-4">
+        <div class="flex gap-2">
+          <button class="h-10 w-10 rounded-xl grid place-items-center bg-[#1f3a5f] text-white">≡</button>
+          <button class="h-10 w-10 rounded-xl grid place-items-center bg-white border border-gray-200">◎</button>
+          <button class="ml-auto px-3 py-2 rounded-xl bg-gray-200 text-sm">Popular</button>
+        </div>
+        <button class="w-full text-left px-4 py-2 rounded-xl border bg-[#1f3a5f] text-white shadow">Home</button>
+        <button class="w-full text-left px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">Sub-forums</button>
+        <button class="w-full text-left px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">Lorem Ipsum</button>
+        <div class="mt-2">
+          <div class="text-sm font-semibold text-gray-700 mb-2">Primary Sub-forums:</div>
+          <div class="space-y-2">
+            <button class="w-full text-left px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">general issues</button>
+            <button class="w-full text-left px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">academic issues</button>
+            <button class="w-full text-left px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">facilities issues</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Column -->
+    <section class="col-span-12 md:col-span-6">
+      <article class="rounded-2xl bg-white shadow overflow-hidden">
+        <div class="p-5">
+          <div class="flex items-center gap-3">
+            <img class="h-9 w-9 rounded-full" src="https://i.pravatar.cc/40?img=11" alt="author" />
+            <div class="flex items-center gap-2 text-sm">
+              <span class="font-medium">s/Alfi Apple Seed</span>
+              <span class="px-2 py-0.5 rounded bg-gray-200 text-gray-700 text-xs">general issues</span>
+            </div>
+          </div>
+
+          <h2 class="mt-3 text-lg font-semibold">Lorem Ipsum</h2>
+          <p class="mt-2 text-gray-700 leading-relaxed">“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”</p>
+          <p class="mt-3 text-gray-700 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+          <!-- Action / formatting row (visual only) -->
+          <div class="mt-4 flex items-center justify-between">
+            <div class="flex items-center gap-3 text-gray-600 text-sm">
+              <span>Share</span>
+              <span>Save</span>
+              <span>Report</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Undo">↶</button>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Redo">↷</button>
+              <div class="text-sm px-2 py-1 rounded-lg bg-gray-100">Arial</div>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Bold">B</button>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Italic">I</button>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Underline">U</button>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Link">🔗</button>
+              <button class="h-8 w-8 grid place-items-center rounded hover:bg-gray-100" title="Image">🖼️</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments Header -->
+        <div class="px-5 py-3 border-t bg-gray-50 text-sm text-gray-700">Comments (126)</div>
+
+        <!-- Comments Section -->
+        <div class="p-5 space-y-6">
+          <!-- Comment 1 -->
+          <div class="flex gap-3">
+            <div class="flex flex-col items-center gap-1 select-none text-gray-600">
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100" aria-label="upvote">▲</button>
+              <div class="text-sm font-semibold">23</div>
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100" aria-label="downvote">▼</button>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 text-sm">
+                <img class="h-7 w-7 rounded-full" src="https://i.pravatar.cc/40?img=12" alt="avatar" />
+                <span class="font-medium text-gray-800">Prince</span>
+                <span class="rounded bg-gray-200 text-gray-700 px-2 py-0.5 text-xs">student</span>
+                <span class="text-gray-500">• 1h ago</span>
+              </div>
+              <p class="mt-2 text-gray-800 leading-relaxed">Totally agree—clear tagging for subforums will help a lot.</p>
+              <div class="mt-2 flex items-center gap-3 text-sm text-gray-600">
+                <button class="hover:text-gray-900">Reply</button>
+                <button class="hover:text-gray-900">Share</button>
+                <button class="hover:text-gray-900">Report</button>
+                <button class="hover:text-gray-900">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comment 2 (with two children) -->
+          <div class="flex gap-3">
+            <div class="flex flex-col items-center gap-1 select-none text-gray-600">
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▲</button>
+              <div class="text-sm font-semibold">12</div>
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▼</button>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 text-sm">
+                <img class="h-7 w-7 rounded-full" src="https://i.pravatar.cc/40?img=13" alt="avatar" />
+                <span class="font-medium text-gray-800">Alfi</span>
+                <span class="rounded bg-gray-200 text-gray-700 px-2 py-0.5 text-xs">moderator</span>
+                <span class="text-gray-500">• 45m ago</span>
+              </div>
+              <p class="mt-2 text-gray-800 leading-relaxed">We're planning sticky posts for FAQs in each subforum.</p>
+              <div class="mt-2 flex items-center gap-3 text-sm text-gray-600">
+                <button class="hover:text-gray-900">Reply</button>
+                <button class="hover:text-gray-900">Share</button>
+                <button class="hover:text-gray-900">Report</button>
+                <button class="hover:text-gray-900">Save</button>
+              </div>
+
+              <!-- Child 1 -->
+              <div class="mt-4 space-y-4">
+                <div class="flex gap-3 ml-4">
+                  <div class="flex flex-col items-center gap-1 select-none text-gray-600">
+                    <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▲</button>
+                    <div class="text-sm font-semibold">5</div>
+                    <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▼</button>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 text-sm">
+                      <img class="h-7 w-7 rounded-full" src="https://i.pravatar.cc/40?img=15" alt="avatar" />
+                      <span class="font-medium text-gray-800">Mahim</span>
+                      <span class="rounded bg-gray-200 text-gray-700 px-2 py-0.5 text-xs">student</span>
+                      <span class="text-gray-500">• 38m ago</span>
+                    </div>
+                    <p class="mt-2 text-gray-800 leading-relaxed">A pinned post per course would be great!</p>
+                  </div>
+                </div>
+
+                <!-- Child 2 -->
+                <div class="flex gap-3 ml-4">
+                  <div class="flex flex-col items-center gap-1 select-none text-gray-600">
+                    <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▲</button>
+                    <div class="text-sm font-semibold">3</div>
+                    <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▼</button>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 text-sm">
+                      <img class="h-7 w-7 rounded-full" src="https://i.pravatar.cc/40?img=16" alt="avatar" />
+                      <span class="font-medium text-gray-800">Nayeem</span>
+                      <span class="rounded bg-gray-200 text-gray-700 px-2 py-0.5 text-xs">student</span>
+                      <span class="text-gray-500">• 30m ago</span>
+                    </div>
+                    <p class="mt-2 text-gray-800 leading-relaxed">And maybe weekly summaries?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comment 3 -->
+          <div class="flex gap-3">
+            <div class="flex flex-col items-center gap-1 select-none text-gray-600">
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▲</button>
+              <div class="text-sm font-semibold">4</div>
+              <button class="h-6 w-6 grid place-items-center rounded hover:bg-gray-100">▼</button>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 text-sm">
+                <img class="h-7 w-7 rounded-full" src="https://i.pravatar.cc/40?img=17" alt="avatar" />
+                <span class="font-medium text-gray-800">Sadman</span>
+                <span class="rounded bg-gray-200 text-gray-700 px-2 py-0.5 text-xs">student</span>
+                <span class="text-gray-500">• 10m ago</span>
+              </div>
+              <p class="mt-2 text-gray-800 leading-relaxed">Can we also get a dark mode soon?</p>
+            </div>
+          </div>
+
+          <!-- New Comment Box (mock) -->
+          <div class="flex gap-3">
+            <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/40?img=8" alt="you" />
+            <div class="flex-1">
+              <textarea class="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 p-3 focus:outline-none focus:ring-2 focus:ring-gray-300" rows="3" placeholder="Add a comment"></textarea>
+              <div class="mt-2 flex justify-end gap-2">
+                <button class="px-3 py-2 rounded-xl bg-gray-100 text-gray-700">Cancel</button>
+                <button class="px-4 py-2 rounded-xl bg-[#1f3a5f] text-white">Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside class="col-span-12 md:col-span-3 space-y-4">
+      <div class="rounded-2xl bg-[#e8bdb7]/50 p-4 shadow">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold">New Post</h3>
+          <button class="h-9 w-9 grid place-items-center rounded-full bg-white shadow">＋</button>
+        </div>
+        <div class="mt-2 flex items-center gap-2 text-sm">
+          <span class="px-2 py-0.5 rounded bg-gray-200 text-gray-700">general issues</span>
+          <button class="h-7 w-7 grid place-items-center rounded-full bg-white shadow">↗</button>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-white p-4 shadow min-h-[220px]">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold">Moderator Announcements:</h3>
+          <button class="h-8 w-8 grid place-items-center rounded-full bg-gray-100">↗</button>
+        </div>
+        <ul class="mt-3 list-disc pl-5 text-sm text-gray-700 space-y-2">
+          <li>New semester subforum structure deployed.</li>
+          <li>Report inappropriate content with the flag icon.</li>
+          <li>Anonymous posting enabled under policy v1.2.</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <div class="h-6"></div>
+</body>
+</html>
