@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IUTian Threads – Notification Alerts Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .toast-enter { opacity: 0; transform: translateY(8px); }
+    .toast-show { opacity: 1; transform: translateY(0); transition: all 0.3s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Header with bell icon -->
+  <header class="bg-gradient-to-r from-pink-400 to-pink-300 shadow">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+      <h1 class="text-white font-semibold text-lg">IUTian Threads – Dashboard</h1>
+      <button id="notifBtn" class="relative h-10 w-10 flex items-center justify-center bg-white rounded-full shadow">
+        🔔
+        <span id="notifBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6">
+    <h2 class="text-xl font-semibold mb-4">Demo Buttons</h2>
+    <div class="flex gap-3">
+      <button onclick="showToast('critical')" class="px-4 py-2 rounded bg-red-600 text-white">Critical</button>
+      <button onclick="showToast('warning')" class="px-4 py-2 rounded bg-yellow-500 text-white">Warning</button>
+      <button onclick="showToast('info')" class="px-4 py-2 rounded bg-green-600 text-white">Info</button>
+    </div>
+  </main>
+
+  <!-- Toast container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
+
+  <!-- Notification panel -->
+  <div id="notifPanel" class="fixed inset-0 hidden z-40">
+    <div class="absolute inset-0 bg-black/30" onclick="togglePanel(false)"></div>
+    <div class="absolute right-0 top-0 h-full w-80 bg-white shadow-lg flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b">
+        <h3 class="font-semibold">Notifications</h3>
+        <button onclick="togglePanel(false)" class="text-gray-500">✖</button>
+      </div>
+      <div id="notifList" class="p-4 space-y-3 overflow-y-auto flex-1">
+        <!-- Alerts will appear here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const notifBtn = document.getElementById('notifBtn');
+    const notifPanel = document.getElementById('notifPanel');
+    const notifList = document.getElementById('notifList');
+    const toastContainer = document.getElementById('toastContainer');
+
+    let unread = 3;
+    const notifBadge = document.getElementById('notifBadge');
+
+    notifBtn.addEventListener('click', () => togglePanel(true));
+
+    function togglePanel(show) {
+      notifPanel.classList.toggle('hidden', !show);
+      if (show) notifBadge.classList.add('hidden');
+    }
+
+    function showToast(type) {
+      const colors = {
+        critical: ['🚨 Critical Alert', 'bg-red-100 text-red-700'],
+        warning: ['⚠️ Warning Alert', 'bg-yellow-100 text-yellow-700'],
+        info: ['ℹ️ Info Update', 'bg-green-100 text-green-700']
+      };
+      const [title, classes] = colors[type];
+
+      // Toast element
+      const toast = document.createElement('div');
+      toast.className = `toast-enter p-4 rounded shadow bg-white flex gap-3 items-start`;
+      toast.innerHTML = `<div class="${classes} rounded-full px-2 py-1 text-sm">${title.split(' ')[0]}</div>
+                         <div>
+                           <div class="font-medium">${title}</div>
+                           <div class="text-sm text-gray-600">This is a ${type} notification.</div>
+                         </div>`;
+
+      toastContainer.appendChild(toast);
+      setTimeout(() => toast.classList.add('toast-show'));
+      setTimeout(() => toast.remove(), 4000);
+
+      // Add to panel
+      const item = document.createElement('div');
+      item.className = `p-3 border rounded flex gap-2 ${classes}`;
+      item.innerHTML = `<div>${title}</div>`;
+      notifList.prepend(item);
+
+      // Increase unread count
+      unread++;
+      notifBadge.textContent = unread;
+      notifBadge.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

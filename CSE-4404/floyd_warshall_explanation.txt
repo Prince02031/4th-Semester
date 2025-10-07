@@ -1,0 +1,36 @@
+
+Floyd-Warshall Algorithm Explanation:
+
+The Floyd-Warshall algorithm is used to find the shortest paths between all pairs of vertices in a weighted graph.
+It works with both positive and negative edge weights but does not work if there is a negative weight cycle.
+
+Key Idea:
+- The algorithm incrementally improves the solution by considering all intermediate vertices one by one.
+- For each pair of vertices (i, j), it checks if going through an intermediate vertex k offers a shorter path.
+- If yes, it updates the shortest distance for that pair.
+
+How It Works:
+1. Initialize a 2D matrix `dist` where dist[i][j] is the direct distance from vertex i to vertex j.
+   If there is no direct edge between i and j, dist[i][j] is set to infinity (a very large number).
+   The distance from a vertex to itself (dist[i][i]) is set to 0.
+
+2. Iterate over all vertices k as potential intermediate vertices.
+   For each pair (i, j), update dist[i][j] as:
+       dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+3. After considering all vertices as intermediate, dist[i][j] contains the shortest path distance from i to j.
+
+Time Complexity:
+- O(n^3), where n is the number of vertices.
+- Suitable for graphs with up to a few hundred vertices.
+
+Example:
+- Given a graph with 4 vertices and edges:
+  1 -> 2 (5), 1 -> 3 (9), 2 -> 3 (3)
+- Initially, dist matrix stores these direct edges.
+- By checking if paths through vertex 2 or 3 are shorter, Floyd-Warshall updates dist.
+- Finally, you get shortest paths between all pairs.
+
+Use Case in the Task:
+- For the Puran Dhaka maze problem, Floyd-Warshall helps to answer shortest path queries
+  between any two spots efficiently after preprocessing all pairs shortest distances.
